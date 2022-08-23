@@ -1,18 +1,51 @@
-import {StyleSheet, View, TouchableOpacity, Image, Text} from 'react-native';
+import {useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  Modal,
+} from 'react-native';
 import PropTypes from 'prop-types';
 
 const ListItem = (props) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <TouchableOpacity style={styles.cat}>
-      <Image
-        style={styles.image}
-        source={{uri: props.singleMedia.thumbnails.w160}}
-      />
-      <View style={styles.info}>
-        <Text style={styles.title}>{props.singleMedia.title}</Text>
-        <Text style={styles.description}>{props.singleMedia.description}</Text>
-      </View>
-    </TouchableOpacity>
+    <>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View>
+          <Image
+            style={styles.image}
+            source={{uri: props.singleMedia.filename}}
+          />
+        </View>
+      </Modal>
+
+      <TouchableOpacity
+        style={styles.cat}
+        onPress={() => setModalVisible(!modalVisible)}
+      >
+        <Image
+          style={styles.thumbnail}
+          source={{uri: props.singleMedia.thumbnails.w160}}
+        />
+        <View style={styles.info}>
+          <Text style={styles.title}>{props.singleMedia.title}</Text>
+          <Text style={styles.description}>
+            {props.singleMedia.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -26,6 +59,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
+    width: '100%',
+    height: '100%',
+  },
+  thumbnail: {
     width: 150,
     height: 200,
     marginRight: 10,
