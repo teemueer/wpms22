@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
   Text,
+  Platform,
+  SafeAreaView,
 } from 'react-native';
 
 const mediaArray = [
@@ -45,26 +47,26 @@ const mediaArray = [
 const App = () => {
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <FlatList
           data={mediaArray}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity>
+              <TouchableOpacity style={styles.cat}>
                 <Image
-                  style={{width: 100, height: 100}}
+                  style={styles.image}
                   source={{uri: item.thumbnails.w160}}
                 />
-                <View>
-                  <Text>{item.title}</Text>
-                  <Text>{item.description}</Text>
+                <View style={styles.info}>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
                 </View>
               </TouchableOpacity>
             );
           }}
         />
-        <StatusBar style="auto" />
-      </View>
+      </SafeAreaView>
+      <StatusBar style="auto" />
     </>
   );
 };
@@ -73,8 +75,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
+  },
+  cat: {
+    flex: 1,
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    backgroundColor: '#ccc',
+    marginBottom: 5,
+    padding: 10,
+  },
+  image: {
+    width: 150,
+    height: 200,
+    marginRight: 10,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  info: {
+    flexShrink: 1,
   },
 });
 
