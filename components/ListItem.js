@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {baseUrl} from './List';
+import {baseUrl} from '../hooks/ApiHooks';
 
 const ListItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
