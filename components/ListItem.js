@@ -8,6 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import {baseUrl} from './List';
 
 const ListItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,7 +26,7 @@ const ListItem = (props) => {
         <View>
           <Image
             style={styles.image}
-            source={{uri: props.singleMedia.filename}}
+            source={{uri: `${baseUrl}/uploads/${props.singleMedia.filename}`}}
           />
         </View>
       </Modal>
@@ -36,7 +37,9 @@ const ListItem = (props) => {
       >
         <Image
           style={styles.thumbnail}
-          source={{uri: props.singleMedia.thumbnails.w160}}
+          source={{
+            uri: `${baseUrl}/uploads/${props.singleMedia.thumbnails.w160}`,
+          }}
         />
         <View style={styles.info}>
           <Text style={styles.title}>{props.singleMedia.title}</Text>
