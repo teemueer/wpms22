@@ -1,26 +1,38 @@
-import React from 'react';
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Platform, SafeAreaView} from 'react-native';
-import List from './components/List';
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import Header from "./components/Header";
+import List from "./components/List";
 
 const App = () => {
   return (
-    <>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={style.container}>
+      <StatusBar style="auto" backgroundColor="#8dc4aa" />
+      <View style={style.header}>
+        <Header />
+      </View>
+      <View style={style.list}>
         <List />
-      </SafeAreaView>
-      <StatusBar style="auto" />
-    </>
+      </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    paddingTop: Platform.OS === 'android' ? 30 : 0,
+    flexDirection: "column",
+    paddingHorizontal: 10,
+    paddingVertical: 40,
+    backgroundColor: "#6d977ed8",
+  },
+  header: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  list: {
+    flex: 2,
+    marginBottom: 10,
   },
 });
 

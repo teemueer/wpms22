@@ -1,78 +1,48 @@
-import {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  Modal,
-} from 'react-native';
-import PropTypes from 'prop-types';
+import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
+import PropTypes from "prop-types";
 
 const ListItem = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View>
-          <Image
-            style={styles.image}
-            source={{uri: props.singleMedia.filename}}
-          />
-        </View>
-      </Modal>
-
-      <TouchableOpacity
-        style={styles.cat}
-        onPress={() => setModalVisible(!modalVisible)}
-      >
-        <Image
-          style={styles.thumbnail}
-          source={{uri: props.singleMedia.thumbnails.w160}}
-        />
-        <View style={styles.info}>
-          <Text style={styles.title}>{props.singleMedia.title}</Text>
-          <Text style={styles.description}>
-            {props.singleMedia.description}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </>
+    <TouchableOpacity style={style.container}>
+      <Image
+        style={style.thumbnail}
+        resizeMode="cover"
+        source={{ uri: props.singleMedia.thumbnails.w160 }}
+      />
+      <View style={style.details}>
+        <Text style={style.title}>{props.singleMedia.title}</Text>
+        <Text style={style.description} numberOfLines={6}>
+          {props.singleMedia.description}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  cat: {
+const style = StyleSheet.create({
+  container: {
     flex: 1,
-    flexWrap: 'nowrap',
-    flexDirection: 'row',
-    backgroundColor: '#ccc',
-    marginBottom: 5,
-    padding: 10,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
+    flexDirection: "row",
+    height: 150,
+    marginBottom: 10,
+    backgroundColor: "#a4e6a2",
+    padding: 5,
   },
   thumbnail: {
-    width: 150,
-    height: 200,
-    marginRight: 10,
+    flex: 1,
+    marginRight: 5,
+    borderBottomLeftRadius: 20,
+  },
+  details: {
+    flex: 2,
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "rgb(255, 255, 255)",
   },
-  info: {
-    flexShrink: 1,
+  description: {
+    color: "#292028",
   },
 });
 
