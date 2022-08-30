@@ -1,38 +1,13 @@
-import { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  Modal,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import PropTypes from "prop-types";
 import { baseUrl } from "../hooks/ApiHooks";
 
 const ListItem = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View>
-          <Image
-            source={{ uri: `${baseUrl}/uploads/${props.singleMedia.filename}` }}
-          />
-        </View>
-      </Modal>
-
       <TouchableOpacity
         style={styles.cat}
-        onPress={() => setModalVisible(!modalVisible)}
+        onPress={() => props.navigation.navigate("Single")}
       >
         <Image
           style={styles.thumbnail}
@@ -80,6 +55,7 @@ const styles = StyleSheet.create({
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default ListItem;
