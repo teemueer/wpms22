@@ -1,15 +1,15 @@
-import {FlatList} from 'react-native';
-import ListItem from './ListItem';
-import {useMedia} from '../hooks/ApiHooks';
+import { FlatList } from "react-native";
+import ListItem from "./ListItem";
+import { useMedia } from "../hooks/ApiHooks";
 
 const List = () => {
-  const {mediaArray} = useMedia();
+  const { mediaArray } = useMedia();
 
   return (
     <FlatList
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
-      renderItem={({item}) => <ListItem singleMedia={item} />}
+      renderItem={({ item }) => <ListItem singleMedia={item} />}
     />
   );
 };

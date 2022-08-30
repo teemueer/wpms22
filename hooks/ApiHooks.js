@@ -1,8 +1,8 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
 
-export const baseUrl = 'https://media.mw.metropolia.fi/wbma';
+export const baseUrl = "https://media.mw.metropolia.fi/wbma";
 
-const loadMedia = async (id = '') => {
+const loadMedia = async (id = "") => {
   const res = await fetch(`${baseUrl}/media/${id}`);
   const json = await res.json();
   return json;
@@ -23,7 +23,7 @@ const useMedia = () => {
     }
   }, []);
 
-  return {mediaArray};
+  return { mediaArray };
 };
 
-export {useMedia};
+export { useMedia };

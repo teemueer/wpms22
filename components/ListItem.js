@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,9 +6,9 @@ import {
   Image,
   Text,
   Modal,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {baseUrl} from '../hooks/ApiHooks';
+} from "react-native";
+import PropTypes from "prop-types";
+import { baseUrl } from "../hooks/ApiHooks";
 
 const ListItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,8 +25,7 @@ const ListItem = (props) => {
       >
         <View>
           <Image
-            style={styles.image}
-            source={{uri: `${baseUrl}/uploads/${props.singleMedia.filename}`}}
+            source={{ uri: `${baseUrl}/uploads/${props.singleMedia.filename}` }}
           />
         </View>
       </Modal>
@@ -55,15 +54,15 @@ const ListItem = (props) => {
 const styles = StyleSheet.create({
   cat: {
     flex: 1,
-    flexWrap: 'nowrap',
-    flexDirection: 'row',
-    backgroundColor: '#ccc',
+    flexWrap: "nowrap",
+    flexDirection: "row",
+    backgroundColor: "#ccc",
     marginBottom: 5,
     padding: 10,
   },
   image: {
-    width: '100%',
-    height: '100%',
+    objectFit: "cover",
+    width: "100%",
   },
   thumbnail: {
     width: 150,
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   info: {
     flexShrink: 1,
