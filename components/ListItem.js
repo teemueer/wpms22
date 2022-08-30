@@ -2,24 +2,26 @@ import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import PropTypes from "prop-types";
 import { baseUrl } from "../hooks/ApiHooks";
 
-const ListItem = (props) => {
+const ListItem = ({ navigation, singleMedia }) => {
   return (
     <>
       <TouchableOpacity
         style={styles.cat}
-        onPress={() => props.navigation.navigate("Single")}
+        onPress={() =>
+          navigation.navigate("Single", {
+            singleMedia,
+          })
+        }
       >
         <Image
           style={styles.thumbnail}
           source={{
-            uri: `${baseUrl}/uploads/${props.singleMedia.thumbnails.w160}`,
+            uri: `${baseUrl}/uploads/${singleMedia.thumbnails.w160}`,
           }}
         />
         <View style={styles.info}>
-          <Text style={styles.title}>{props.singleMedia.title}</Text>
-          <Text style={styles.description}>
-            {props.singleMedia.description}
-          </Text>
+          <Text style={styles.title}>{singleMedia.title}</Text>
+          <Text style={styles.description}>{singleMedia.description}</Text>
         </View>
       </TouchableOpacity>
     </>
