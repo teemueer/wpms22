@@ -1,6 +1,6 @@
 import { StyleSheet, View, TouchableOpacity, Image, Text } from "react-native";
 import PropTypes from "prop-types";
-import { baseUrl } from "../hooks/ApiHooks";
+import { baseUrl } from "../utils/config";
 
 const ListItem = ({ navigation, singleMedia }) => {
   return (

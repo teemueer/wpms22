@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
-
-export const baseUrl = "https://media.mw.metropolia.fi/wbma";
-
-const loadMedia = async (id = "") => {
-  const res = await fetch(`${baseUrl}/media/${id}`);
-  const json = await res.json();
-  return json;
-};
+import { baseUrl } from "../utils/config";
+import { myFetch } from "../utils/common";
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
-  useEffect(() => {
+  const loadMedia = async () => {
     try {
-      loadMedia().then((json) => {
-        Promise.all(
-          json.map(async (item) => await loadMedia(item.file_id))
-        ).then((json) => setMediaArray(json));
-      });
+      const media = await myFetch(`${baseUrl}/media`);
+      const mediaDetails = await Promise.all(
+        media.map(
+          async (item) => await myFetch(`${baseUrl}/media/${item.file_id}`)
+        )
+      );
+      setMediaArray(mediaDetails);
     } catch (error) {
-      console.error(error);
+      console.error('loadMedia():', error);
     }
+  };
+
+  useEffect(() => {
+    loadMedia();
   }, []);
 
   return { mediaArray };
