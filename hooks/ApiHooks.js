@@ -15,7 +15,7 @@ const useMedia = () => {
       );
       setMediaArray(mediaDetails);
     } catch (error) {
-      console.error('loadMedia():', error);
+      console.error("loadMedia():", error);
     }
   };
 
@@ -26,4 +26,42 @@ const useMedia = () => {
   return { mediaArray };
 };
 
-export { useMedia };
+const useLogin = () => {
+  const postLogin = async (userCredentials) => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userCredentials),
+    };
+
+    try {
+      const json = await myFetch(`${baseUrl}/login`, options);
+      return json;
+    } catch (error) {
+      console.error("postLogin():", error);
+    }
+  };
+
+  return { postLogin };
+};
+
+const useUser = () => {
+  const getUserByToken = async (token) => {
+    try {
+      const options = {
+        method: "GET",
+        headers: { "x-access-token": token },
+      };
+      const user = await myFetch(`${baseUrl}/users/user`, options);
+      return user;
+    } catch (error) {
+      console.error("getUserByToken():", error);
+    }
+  };
+
+  return { getUserByToken };
+};
+
+export { useMedia, useLogin, useUser };

@@ -2,15 +2,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect } from "react";
 import { Button, StyleSheet, View, Text } from "react-native";
 import { MainContext } from "../contexts/MainContext";
+import { useLogin, useUser } from "../hooks/ApiHooks";
 
 const Login = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useContext(MainContext);
+  const { postLogin } = useLogin();
+  const { getUserByToken } = useUser();
 
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem("userToken");
-      console.log("token", userToken);
-      if (userToken === "abc") {
+      if (userToken) {
+        const user = await getUserByToken(userToken);
         setIsLoggedIn(true);
       }
     } catch (error) {
@@ -24,8 +27,10 @@ const Login = ({ navigation }) => {
 
   const logIn = async () => {
     try {
+      const userCredentials = { username: "teemu", password: "salasana2" };
+      const user = await postLogin(userCredentials);
       setIsLoggedIn(true);
-      await AsyncStorage.setItem("userToken", "abc");
+      await AsyncStorage.setItem("userToken", user.token);
     } catch (error) {
       console.error("logIn():", error);
     }
