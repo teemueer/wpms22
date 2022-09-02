@@ -22,7 +22,7 @@ const TabScreen = () => {
 const Stack = createNativeStackNavigator();
 
 const StackScreen = () => {
-  const [isLoggedIn] = useContext(MainContext);
+  const {isLoggedIn} = useContext(MainContext);
 
   return (
     <Stack.Navigator>

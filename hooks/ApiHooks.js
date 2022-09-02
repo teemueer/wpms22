@@ -40,7 +40,7 @@ const useLogin = () => {
       const json = await myFetch(`${baseUrl}/login`, options);
       return json;
     } catch (error) {
-      console.error("postLogin():", error);
+      throw new Error(error.message);
     }
   };
 
@@ -61,7 +61,23 @@ const useUser = () => {
     }
   };
 
-  return { getUserByToken };
+  const postUser = async (data) => {
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      const res = await myFetch(`${baseUrl}/users`, options);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { getUserByToken, postUser };
 };
 
 export { useMedia, useLogin, useUser };
