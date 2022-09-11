@@ -14,11 +14,14 @@ const RegisterForm = () => {
   } = useForm({
     defaultValues: {
       username: "",
+      email: "",
       password: "",
+      full_name: "",
     },
+    mode: "onBlur",
   });
 
-  const { postUser } = useUser();
+  const { postUser, checkUsername } = useUser();
   const onSubmit = (data) => register(data);
 
   const register = async (data) => {
@@ -36,7 +39,12 @@ const RegisterForm = () => {
 
       <Controller
         control={control}
-        rules={{ required: true, minLength: 3 }}
+        rules={{
+          required: true,
+          minLength: 3,
+          validate: async (value) =>
+            (await checkUsername(value)) ? true : "Username is already taken",
+        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
             onBlur={onBlur}
@@ -45,9 +53,14 @@ const RegisterForm = () => {
             placeholder="username"
             autoCapitalize="none"
             errorMessage={
-              (errors.username && <Text>This field is required.</Text>) ||
+              (errors.username?.type === "required" && (
+                <Text>This field is required.</Text>
+              )) ||
               (errors.username?.type === "minLength" && (
                 <Text>Minimum 3 characters.</Text>
+              )) ||
+              (errors.username?.type === "validate" && (
+                <Text>{errors.username.message}</Text>
               ))
             }
           />
