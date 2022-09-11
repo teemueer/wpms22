@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { baseUrl } from "../utils/config";
 import { myFetch } from "../utils/common";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -86,7 +87,26 @@ const useUser = () => {
     }
   };
 
-  return { getUserByToken, postUser, checkUsername };
+  const putUser = async (data) => {
+    try {
+      const token = await AsyncStorage.getItem("userToken");
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+        body: JSON.stringify(data),
+      };
+      const res = await myFetch(`${baseUrl}/users`, options);
+      console.log(res);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { getUserByToken, postUser, checkUsername, putUser };
 };
 
 const useTag = () => {
