@@ -7,14 +7,27 @@ import Profile from "../views/Profile";
 import Single from "../views/Single";
 import Login from "../views/Login";
 import { MainContext } from "../contexts/MainContext";
+import { Icon } from "@rneui/themed";
 
 const Tab = createBottomTabNavigator();
 
 const TabScreen = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({ color }) => <Icon name="home" color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ color }) => <Icon name="person" color={color} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };

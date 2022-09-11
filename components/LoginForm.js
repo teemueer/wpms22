@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import { Input, Button, Text, Card } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLogin } from "../hooks/ApiHooks";
 import { useContext } from "react";
@@ -34,66 +34,48 @@ const LoginForm = () => {
   };
 
   return (
-    <View>
-      <Text style={styles.header}>Login Form</Text>
+    <Card>
+      <Card.Title>Login</Card.Title>
       <Controller
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="username"
             autoCapitalize="none"
+            errorMessage={
+              errors.username && <Text>This field is required.</Text>
+            }
           />
         )}
         name="username"
       />
-      {errors.username && (
-        <Text style={styles.error}>This field is required.</Text>
-      )}
 
       <Controller
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="password"
             autoCapitalize="none"
             secureTextEntry={true}
+            errorMessage={
+              errors.password && <Text>This field is required.</Text>
+            }
           />
         )}
         name="password"
       />
-      {errors.password && (
-        <Text style={styles.error}>This field is required.</Text>
-      )}
 
       <Button title="Sign in" onPress={handleSubmit(onSubmit)}></Button>
-    </View>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  input: {
-    padding: 5,
-    borderWidth: 1,
-    width: 200,
-  },
-  error: {
-    color: "red",
-  },
-});
 
 export default LoginForm;

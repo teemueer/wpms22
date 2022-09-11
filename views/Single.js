@@ -1,39 +1,31 @@
 import React from "react";
-import { StyleSheet, SafeAreaView, Text, Image } from "react-native";
+import { ScrollView, ActivityIndicator } from "react-native";
+import { Card, ListItem, Text, Image } from "@rneui/themed";
+import FullSizeImage from "../components/FullSizeImage";
 import PropTypes from "prop-types";
-import { baseUrl } from "../hooks/ApiHooks";
+import { baseUrl } from "../utils/config";
 
 const Single = ({ route }) => {
   const { singleMedia } = route.params;
   console.log(singleMedia);
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>{singleMedia.title}</Text>
-      <Image
-        resizeMode="contain"
-        style={styles.image}
-        source={{
-          uri: `${baseUrl}/uploads/${singleMedia.filename}`,
-        }}
-      />
-    </SafeAreaView>
+    <ScrollView>
+      <Card>
+        <Card.Title>{singleMedia.title}</Card.Title>
+        <Card.Divider />
+        <FullSizeImage
+          source={{ uri: `${baseUrl}/uploads/${singleMedia.filename}` }}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+        <Card.Divider />
+        <ListItem>
+          <Text>{singleMedia.description}</Text>
+          <Text></Text>
+        </ListItem>
+      </Card>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 40,
-  },
-  image: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-});
 
 Single.propTypes = {
   route: PropTypes.object,

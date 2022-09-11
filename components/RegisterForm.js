@@ -1,12 +1,11 @@
 import { Controller, useForm } from "react-hook-form";
-import { View, Text, Button, TextInput, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Input, Button, Text, Card } from "@rneui/themed";
 import { useUser } from "../hooks/ApiHooks";
 import { useContext } from "react";
 import { MainContext } from "../contexts/MainContext";
 
 const RegisterForm = () => {
-  const {isLoggedIn, setIsLoggedIn} = useContext(MainContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(MainContext);
 
   const {
     control,
@@ -32,107 +31,87 @@ const RegisterForm = () => {
   };
 
   return (
-    <View>
-      <Text style={styles.header}>Registeration Form</Text>
+    <Card>
+      <Card.Title>Registeration Form</Card.Title>
 
       <Controller
         control={control}
         rules={{ required: true, minLength: 3 }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="username"
             autoCapitalize="none"
+            errorMessage={
+              (errors.username && <Text>This field is required.</Text>) ||
+              (errors.username?.type === "minLength" && (
+                <Text>Minimum 3 characters.</Text>
+              ))
+            }
           />
         )}
         name="username"
       />
-      {errors.username && (
-        <Text style={styles.error}>This field is required.</Text>
-      )}
-      {errors.username?.type === "minLength" && (
-        <Text style={styles.error}>Minimum 3 characters.</Text>
-      )}
 
       <Controller
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="email"
             autoCapitalize="none"
+            errorMessage={errors.email && <Text>This field is required.</Text>}
           />
         )}
         name="email"
       />
-      {errors.email && (
-        <Text style={styles.error}>This field is required.</Text>
-      )}
 
       <Controller
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="password"
             autoCapitalize="none"
             secureTextEntry={true}
+            errorMessage={
+              errors.password && <Text>This field is required.</Text>
+            }
           />
         )}
         name="password"
       />
-      {errors.password && (
-        <Text style={styles.error}>This field is required.</Text>
-      )}
 
       <Controller
         control={control}
         rules={{ required: false, minLength: 3 }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
+          <Input
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             placeholder="full name"
+            errorMessage={
+              errors.full_name?.type === "minLength" && (
+                <Text>Minimum 3 characters.</Text>
+              )
+            }
           />
         )}
         name="full_name"
       />
-      {errors.full_name?.type === "minLength" && (
-        <Text style={styles.error}>Minimum 3 characters.</Text>
-      )}
 
       <Button title="Register" onPress={handleSubmit(onSubmit)}></Button>
-    </View>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  input: {
-    padding: 5,
-    borderWidth: 1,
-    width: 200,
-  },
-  error: {
-    color: "red",
-  },
-});
 
 export default RegisterForm;

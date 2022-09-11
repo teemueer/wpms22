@@ -1,16 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  Button,
-  View,
-  Image,
-} from "react-native";
+import { Avatar, Button, Card, ListItem } from "@rneui/themed";
 import { MainContext } from "../contexts/MainContext";
 import { useTag } from "../hooks/ApiHooks";
 import { baseUrl } from "../utils/config";
+import FullSizeImage from "../components/FullSizeImage";
 
 const Profile = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(MainContext);
@@ -40,44 +34,30 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.userDetails}>
-        <Text style={styles.header}>Profile</Text>
-        <Image style={styles.avatar} source={{ uri: avatar }} />
-        <Text>User ID: {user.user_id}</Text>
-        <Text>Username: {user.username}</Text>
-        <Text>Email: {user.email}</Text>
-        <Text>Full name: {user.full_name ? user.full_name : "N/A"}</Text>
-        {user.time_created && (
-          <Text>
-            Registered: {new Date(user.time_created).toLocaleDateString()}
-          </Text>
-        )}
-      </View>
-      <Button title={"Log out"} onPress={logout} />
-    </SafeAreaView>
+    <Card>
+      <Card.Title h4>
+        {user.full_name ? user.full_name : user.username}
+      </Card.Title>
+      <FullSizeImage source={{ uri: avatar }} />
+      <ListItem>
+        <Avatar
+          icon={{ name: "contact-mail", type: "material" }}
+          containerStyle={{ backgroundColor: "#aaa" }}
+        />
+        <ListItem.Title>{user.email}</ListItem.Title>
+      </ListItem>
+      <ListItem>
+        <Avatar
+          icon={{ name: "person", type: "material" }}
+          containerStyle={{ backgroundColor: "#aaa" }}
+        />
+        <ListItem.Title>
+          {user.username} (id: {user.user_id})
+        </ListItem.Title>
+      </ListItem>
+      <Button title="Logout" onPress={logout} />
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    paddingTop: 40,
-  },
-  header: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  userDetails: {
-    flex: 1,
-  },
-  avatar: {
-    width: 200,
-    height: 200,
-  },
-});
 
 export default Profile;

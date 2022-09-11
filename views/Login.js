@@ -1,12 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect } from "react";
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-  Keyboard,
-} from "react-native";
+import { View } from "react-native";
 import { MainContext } from "../contexts/MainContext";
 import { useUser } from "../hooks/ApiHooks";
 import LoginForm from "../components/LoginForm";
@@ -34,29 +28,11 @@ const Login = ({ navigation }) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableOpacity
-        onPress={() => Keyboard.dismiss()}
-        style={{ flex: 1 }}
-        activeOpacity={1}
-      >
-        <LoginForm />
-        <RegisterForm />
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+    <View>
+      <LoginForm />
+      <RegisterForm />
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default Login;
