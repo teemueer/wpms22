@@ -80,4 +80,10 @@ const useUser = () => {
   return { getUserByToken, postUser };
 };
 
-export { useMedia, useLogin, useUser };
+const useTag = () => {
+  const getFilesByTag = async (tag) => await myFetch(`${baseUrl}/tags/${tag}`);
+
+  return { getFilesByTag };
+};
+
+export { useMedia, useLogin, useUser, useTag };
