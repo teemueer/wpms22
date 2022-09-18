@@ -1,17 +1,22 @@
-import { FlatList } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 import ListItem from "./ListItem";
 import { useMedia } from "../hooks/ApiHooks";
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { MainContext } from "../contexts/MainContext";
 
-const List = (props) => {
-  const { mediaArray } = useMedia();
+const List = ({ navigation }) => {
+  const { update, loading, setLoading } = useContext(MainContext);
+  const { mediaArray } = useMedia(update, setLoading);
 
-  return (
+  return loading ? (
+    <ActivityIndicator size="large" />
+  ) : (
     <FlatList
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => (
-        <ListItem navigation={props.navigation} singleMedia={item} />
+        <ListItem navigation={navigation} singleMedia={item} />
       )}
     />
   );

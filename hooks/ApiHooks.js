@@ -1,30 +1,51 @@
 import { useState, useEffect } from "react";
-import { baseUrl } from "../utils/config";
+import { baseUrl, myTag } from "../utils/config";
 import { myFetch } from "../utils/common";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const useMedia = () => {
+const useMedia = (update, setLoading) => {
   const [mediaArray, setMediaArray] = useState([]);
 
   const loadMedia = async () => {
+    setLoading(true);
     try {
-      const media = await myFetch(`${baseUrl}/media`);
+      const media = await myFetch(`${baseUrl}/tags/${myTag}`);
       const mediaDetails = await Promise.all(
         media.map(
           async (item) => await myFetch(`${baseUrl}/media/${item.file_id}`)
         )
       );
-      setMediaArray(mediaDetails);
+      setMediaArray(
+        mediaDetails.sort((a, b) => (a.time_added > b.time_added ? -1 : 1))
+      );
     } catch (error) {
       console.error("loadMedia():", error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  };
+
+  const postMedia = async (token, data) => {
+    try {
+      const options = {
+        method: "POST",
+        headers: { "x-access-token": token },
+        body: data,
+      };
+      const res = await myFetch(`${baseUrl}/media`, options);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
 
   useEffect(() => {
     loadMedia();
-  }, []);
+  }, [update]);
 
-  return { mediaArray };
+  return { mediaArray, postMedia };
 };
 
 const useLogin = () => {
@@ -112,7 +133,24 @@ const useUser = () => {
 const useTag = () => {
   const getFilesByTag = async (tag) => await myFetch(`${baseUrl}/tags/${tag}`);
 
-  return { getFilesByTag };
+  const postTag = async (token, tag) => {
+    const options = {
+      method: "POST",
+      headers: {
+        "x-access-token": token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tag),
+    };
+    try {
+      const res = await myFetch(`${baseUrl}/tags`, options);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { getFilesByTag, postTag };
 };
 
 export { useMedia, useLogin, useUser, useTag };

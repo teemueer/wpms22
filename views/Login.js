@@ -18,8 +18,10 @@ const Login = ({ navigation }) => {
       const userToken = await AsyncStorage.getItem("userToken");
       if (userToken) {
         const user = await getUserByToken(userToken);
-        setUser(user);
-        setIsLoggedIn(true);
+        if (user) {
+          setUser(user);
+          setIsLoggedIn(true);
+        }
       }
     } catch (error) {
       console.error("checkToken():", error);
