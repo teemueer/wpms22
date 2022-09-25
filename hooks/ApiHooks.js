@@ -70,6 +70,19 @@ const useLogin = () => {
 };
 
 const useUser = () => {
+  const getUserById = async (token, id) => {
+    try {
+      const options = {
+        method: "GET",
+        headers: { "x-access-token": token },
+      };
+      const user = await myFetch(`${baseUrl}/users/${id}`, options);
+      return user;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   const getUserByToken = async (token) => {
     try {
       const options = {
@@ -127,7 +140,7 @@ const useUser = () => {
     }
   };
 
-  return { getUserByToken, postUser, checkUsername, putUser };
+  return { getUserById, getUserByToken, postUser, checkUsername, putUser };
 };
 
 const useTag = () => {
@@ -153,4 +166,48 @@ const useTag = () => {
   return { getFilesByTag, postTag };
 };
 
-export { useMedia, useLogin, useUser, useTag };
+const useFavorite = () => {
+  const getFavoritesById = async (token, id) => {
+    const options = {
+      method: "GET",
+      headers: {
+        "x-access-token": token,
+      },
+    };
+    try {
+      const favorites = await myFetch(
+        `${baseUrl}/favourites/file/${id}`,
+        options
+      );
+      const favoritesDetails = await Promise.all(
+        favorites.map(
+          async (f) => await myFetch(`${baseUrl}/users/${f.user_id}`, options)
+        )
+      );
+      return favoritesDetails;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const addFavorite = async (token, id) => {
+    const options = {
+      method: "POST",
+      headers: {
+        "x-access-token": token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ file_id: id }),
+    };
+    try {
+      const res = await myFetch(`${baseUrl}/favourites`, options);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return { getFavoritesById, addFavorite };
+};
+
+export { useMedia, useLogin, useUser, useTag, useFavorite };
