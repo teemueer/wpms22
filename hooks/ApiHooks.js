@@ -1,20 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { baseUrl, myTag } from "../utils/config";
 import { myFetch } from "../utils/common";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MainContext } from "../contexts/MainContext";
 
-const useMedia = (update, setLoading) => {
+let i = 0;
+
+const useMedia = (update, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
+  const { setLoading } = useContext(MainContext);
 
-  const loadMedia = async () => {
+  const loadMedia = async (userId) => {
     setLoading(true);
+    console.log("loadmedia " + i++);
     try {
-      const media = await myFetch(`${baseUrl}/tags/${myTag}`);
+      const media = userId
+        ? await myFetch(`${baseUrl}/media/user/${userId}`)
+        : await myFetch(`${baseUrl}/media`);
+
       const mediaDetails = await Promise.all(
         media.map(
           async (item) => await myFetch(`${baseUrl}/media/${item.file_id}`)
         )
       );
+
       setMediaArray(
         mediaDetails.sort((a, b) => (a.time_added > b.time_added ? -1 : 1))
       );
@@ -31,8 +40,11 @@ const useMedia = (update, setLoading) => {
     try {
       const options = {
         method: "POST",
-        headers: { "x-access-token": token },
-        body: data,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+        body: JSON.stringify(data),
       };
       const res = await myFetch(`${baseUrl}/media`, options);
       return res;
@@ -41,11 +53,41 @@ const useMedia = (update, setLoading) => {
     }
   };
 
+  const putMedia = async (token, data, fileId) => {
+    try {
+      console.log(token, data, fileId);
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+        body: JSON.stringify(data),
+      };
+      const res = await myFetch(`${baseUrl}/media/${fileId}`, options);
+      return res;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const deleteMedia = async (token, fileId) => {
+    const options = {
+      method: "DELETE",
+      headers: { "x-access-token": token },
+    };
+    try {
+      return await myFetch(`${baseUrl}/media/${fileId}`, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   useEffect(() => {
-    loadMedia();
+    loadMedia(userId);
   }, [update]);
 
-  return { mediaArray, postMedia };
+  return { mediaArray, postMedia, putMedia, deleteMedia };
 };
 
 const useLogin = () => {

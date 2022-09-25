@@ -1,20 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, ActivityIndicator } from "react-native";
-import { Card, ListItem, Text, Avatar } from "@rneui/themed";
+import { Card, ListItem, Text, Avatar, Button } from "@rneui/themed";
 import FullSizeImage from "../components/FullSizeImage";
 import FullSizeVideo from "../components/FullSizeVideo";
 import PropTypes from "prop-types";
 import { baseUrl } from "../utils/config";
 import { useTag, useUser, useFavorite } from "../hooks/ApiHooks";
-import { MainContext } from "../contexts/MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { Logs } from "expo";
-import { Button } from "@rneui/base";
-Logs.enableExpoCliLogging();
-
 const Single = ({ route }) => {
-  const { user } = useContext(MainContext);
   const { singleMedia } = route.params;
   const [uploader, setUploader] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -29,7 +23,7 @@ const Single = ({ route }) => {
       const avatar = (
         await getFilesByTag(`avatar_${singleMedia.user_id}`)
       ).pop();
-      uploader.avatar = `${baseUrl}/uploads/${avatar.filename}`;
+      if (avatar) uploader.avatar = `${baseUrl}/uploads/${avatar.filename}`;
       setUploader(uploader);
     } catch (error) {
       console.log("getUploader():", error.message);
@@ -40,7 +34,6 @@ const Single = ({ route }) => {
     try {
       const token = await AsyncStorage.getItem("userToken");
       const favorites = await getFavoritesById(token, singleMedia.file_id);
-      console.log(favorites);
       setFavorites(favorites);
     } catch (error) {
       console.log("getFavorites():", error.message);
@@ -51,7 +44,6 @@ const Single = ({ route }) => {
     try {
       const token = await AsyncStorage.getItem("userToken");
       const res = await addFavorite(token, singleMedia.file_id);
-      console.log(res);
     } catch (error) {
       console.log("like():", error.message);
     }
@@ -84,7 +76,9 @@ const Single = ({ route }) => {
         </ListItem>
         {uploader ? (
           <ListItem>
-            <Avatar source={{ uri: uploader.avatar }} />
+            {uploader.avatar ? (
+              <Avatar source={{ uri: uploader.avatar }} />
+            ) : null}
             <Text>{uploader.username}</Text>
           </ListItem>
         ) : null}
@@ -98,7 +92,7 @@ const Single = ({ route }) => {
             </ListItem>
             <ListItem>
               {favorites.map((f) => (
-                <ListItem>
+                <ListItem key={f.user_id}>
                   <Text>{f.username} liked this</Text>
                 </ListItem>
               ))}

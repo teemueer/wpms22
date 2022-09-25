@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PropTypes } from "prop-types";
 import { Video } from "expo-av";
+
+import { Logs } from "expo";
+
+Logs.enableExpoCliLogging();
 
 const FullSizeVideo = (props) => {
   const video = React.useRef(null);
@@ -16,7 +20,6 @@ const FullSizeVideo = (props) => {
       onLoad={async () => {
         await video.current?.playAsync();
       }}
-      isMuted={true}
     />
   );
 };

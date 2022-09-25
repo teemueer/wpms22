@@ -7,7 +7,7 @@ import { useTag, useUser } from "../hooks/ApiHooks";
 import { baseUrl } from "../utils/config";
 import FullSizeImage from "../components/FullSizeImage";
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(MainContext);
   const { getFilesByTag } = useTag();
   const { putUser } = useUser();
@@ -39,7 +39,6 @@ const Profile = () => {
 
   const changeEmail = async (data) => {
     try {
-      console.log(data);
       await putUser(data);
       setEmail(data.email);
       setShowEmailInput(false);
@@ -85,6 +84,7 @@ const Profile = () => {
           {user.username} (id: {user.user_id})
         </ListItem.Title>
       </ListItem>
+      <Button title="My Files" onPress={() => navigation.navigate("MyFiles")} />
       <Button title="Logout" onPress={logout} />
     </Card>
   ) : (

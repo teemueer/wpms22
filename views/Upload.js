@@ -15,7 +15,7 @@ const Upload = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  const { postMedia } = useMedia(update, setLoading);
+  const { postMedia } = useMedia(update);
   const { postTag } = useTag();
 
   const {
@@ -49,7 +49,6 @@ const Upload = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("usefocus");
       onReset();
     }, [navigation])
   );
@@ -70,10 +69,7 @@ const Upload = ({ navigation }) => {
       const token = await AsyncStorage.getItem("userToken");
 
       let res = await postMedia(token, formData);
-      console.log(res);
-
       res = await postTag(token, { file_id: res.file_id, tag: myTag });
-      console.log(res);
 
       setTimeout(() => {
         setUpdate(!update);
